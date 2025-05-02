@@ -14,6 +14,15 @@ public class Cube : MonoBehaviour
         ChanceDuplication = 100;
     }
 
+    public void Init(Vector3 oldScale, float newChance)
+    {
+        RandomizeColor();
+        SetScale(oldScale);
+        SetChanceDuplication(100);
+        SetChanceDuplication(newChance);
+        ReduceChance();
+    }
+
     private void ReduceChance()
     {
         ChanceDuplication = ChanceDuplication * 0.5f;
@@ -40,15 +49,4 @@ public class Cube : MonoBehaviour
         newMaterial.color = randomColor;
         renderer.material = newMaterial;
     }
-
-    public void Init(Vector3 oldScale, float newChance)
-    {
-        RandomizeColor();
-        SetScale(oldScale);
-        SetChanceDuplication(100);
-        SetChanceDuplication(newChance);
-        ReduceChance();
-    }
-
-
 }
