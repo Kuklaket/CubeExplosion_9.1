@@ -8,16 +8,16 @@ public class RayCollisionCheck : MonoBehaviour
 {
     [SerializeField] private RayHandler _rayHandler;
 
-    public event Action<Collider> OnCorrectColliderHit;
+    public event Action<Collider> CorrectColliderHiting;
 
     private void OnEnable()
     {
-        _rayHandler.OnRayCollisioned += ComponentNameCheked;
+        _rayHandler.RayCollisioned += ComponentNameCheked;
     }
 
     private void OnDisable()
     {
-        _rayHandler.OnRayCollisioned -= ComponentNameCheked;
+        _rayHandler.RayCollisioned -= ComponentNameCheked;
     }
 
     private void ComponentNameCheked(RaycastHit[] hits)
@@ -31,7 +31,7 @@ public class RayCollisionCheck : MonoBehaviour
             if (cube != null)
             {
                 Debug.Log("Найден объект Cube");
-                OnCorrectColliderHit?.Invoke(hit.collider);
+                CorrectColliderHiting?.Invoke(hit.collider);
                 break;
             }           
         }      

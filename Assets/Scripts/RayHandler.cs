@@ -11,16 +11,16 @@ public class RayHandler : MonoBehaviour
     [SerializeField] private Ray _ray;
     [SerializeField] private float _maxDistance = 10;
 
-    public event Action<RaycastHit[]> OnRayCollisioned;
+    public event Action<RaycastHit[]> RayCollisioned;
 
     private void OnEnable()
     {
-        _playerInput.OnScreenPressed += Raycast;
+        _playerInput.ScreenPressed += Raycast;
     }
 
     private void OnDisable()
     {
-        _playerInput.OnScreenPressed -= Raycast;
+        _playerInput.ScreenPressed -= Raycast;
     }
 
     private void Raycast()
@@ -31,7 +31,7 @@ public class RayHandler : MonoBehaviour
 
         if (hits.Length >= 1)
         {
-            OnRayCollisioned?.Invoke(hits);         
+            RayCollisioned?.Invoke(hits);         
         }
     }
 }

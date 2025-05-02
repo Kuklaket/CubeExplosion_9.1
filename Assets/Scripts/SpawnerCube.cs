@@ -13,7 +13,7 @@ public class SpawnerCube : MonoBehaviour
     private List<Rigidbody> _spawnedCubes = new List<Rigidbody>();
     private Cube _newCube;
 
-    public event Action<Collider,List<Rigidbody>> OnSpawned;
+    public event Action<Collider,List<Rigidbody>> SpawnCompleted;
 
     private void Start()
     {
@@ -23,12 +23,12 @@ public class SpawnerCube : MonoBehaviour
 
     private void OnEnable()
     {
-        _rayCollisionCheck.OnCorrectColliderHit += Spawner;
+        _rayCollisionCheck.CorrectColliderHiting += Spawner;
     }
 
     private void OnDisable()
     {
-        _rayCollisionCheck.OnCorrectColliderHit -= Spawner;
+        _rayCollisionCheck.CorrectColliderHiting -= Spawner;
     }
 
     private void Spawner(Collider collider)
@@ -37,30 +37,28 @@ public class SpawnerCube : MonoBehaviour
         int maxCountCubes = 6;
         int minNumberForGeneration = 0;
         int maxNumberForGeneration = 100;
-        int countNewCube = UnityEngine.Random.Range(minCountCubes, maxCountCubes);
+        int countNewCube = UnityEngine.Random.Range(minCountCubes, maxCountCubes+1);
         int generatedNumber = UnityEngine.Random.Range(minNumberForGeneration, maxNumberForGeneration);
 
         Rigidbody newCubeRigidbody; 
         Vector3 PositionForNewCude = GetRandomSpawnPoint();
-        Cube parentCube = collider.GetComponent<Cube>();
 
-        if (generatedNumber < parentCube.ChanceDuplication)
+        Cube parentCube;
+        collider.TryGetComponent(out parentCube);
+
+        if (generatedNumber < parentCube.ChanceDuplication && parentCube != null)
         {
             for (int i = 0; i < countNewCube; i++)
             {               
                 _newCube = Instantiate(_cube, PositionForNewCude, Quaternion.identity);
-                _newCube.RandomizeColor();
-                _newCube.SetScale(collider.transform.localScale);
-                _newCube.SetChanceDuplication(100);              
-                _newCube.SetChanceDuplication(collider.gameObject.GetComponent<Cube>().ChanceDuplication);
-                _newCube.ReduceChance();
+                _newCube.Init(collider.transform.localScale, parentCube.ChanceDuplication);
 
                 newCubeRigidbody = _newCube.GetComponent<Rigidbody>();
                 _spawnedCubes.Add(newCubeRigidbody);
             }
         }
 
-        OnSpawned?.Invoke(collider,_spawnedCubes);
+        SpawnCompleted?.Invoke(collider,_spawnedCubes);
         Cube.Destroy(collider.gameObject);
     }
 

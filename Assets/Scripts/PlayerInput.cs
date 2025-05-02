@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public event Action OnScreenPressed;
+    public event Action ScreenPressed;
 
     private void Update()
     {
-        Pressed();
+        IsLeftMouseButtonDown();
     }
 
-    public void Pressed()
+    public void IsLeftMouseButtonDown()
     {
         if (Input.GetMouseButtonDown(0))
-            OnScreenPressed?.Invoke();
+            ScreenPressed?.Invoke();
     }
 }
